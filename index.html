@@ -1226,15 +1226,15 @@
     const zoomBadge = document.getElementById('zoomBadge');
 
     // Frame overlay
-    // Frame overlay is embedded as base64 so opening this file directly
-    // (file://, no server) never taints the canvas — Chromium treats
-    // every separate local file as its own opaque origin, so a plain
-    // <img src="nasa.png"> would poison every getImageData()/toBlob()
-    // call the moment the frame is drawn (histogram, every pixel-level
-    // slider, and both export buttons).
-    const FRAME_SRC = './nasa.png';
+    // Loaded from nasa.png (same folder / same repo on GitHub) instead of
+    // being embedded as base64. This file is meant to be served over
+    // http(s) (e.g. GitHub Pages), so the image is same-origin and does
+    // NOT taint the canvas — getImageData()/toBlob() (histogram, every
+    // pixel-level slider, and both export buttons) keep working normally.
+    // If you ever open this file directly via file://, the canvas reads
+    // WILL be blocked by the browser; serve it over a local server instead.
     const frameImg = new Image();
-    frameImg.src = FRAME_DATA_URI;
+    frameImg.src = 'nasa.png';
     frameImg.onload = () => draw();
 
     // ═══════════════════════════════════════════════════
